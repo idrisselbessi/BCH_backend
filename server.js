@@ -20,13 +20,13 @@ import petrolierRoutes from "./routes/petrolier.js";
 
 const app = express();
 const port = process.env.PORT || 3337;
-const dbUrl = "mongodb://127.0.0.1:27017";
+const dbURL = process.env.DBURL || "mongodb://127.0.0.1:27017";
 const dbName = "bouchaddakh_DB";
 
 mongoose.set("debug", true);
 mongoose.Promise = global.Promise;
 mongoose
-  .connect(`${dbUrl}/${dbName}`)
+  .connect(`${dbURL}/${dbName}`)
   .then(() => console.log(`Connected to ${dbName}`))
   .catch((err) => console.error(err));
 
