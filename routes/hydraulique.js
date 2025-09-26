@@ -1,3 +1,5 @@
+// routes/hydraulique.js
+
 import express from "express";
 import multer from "multer";
 import { join, dirname } from "path";
@@ -5,10 +7,11 @@ import { fileURLToPath } from "url";
 
 import { authMiddleware, isAdmin } from "../middlewares/AuthVerify.js";
 import {
-  createProduct,
-  getProducts,
-  getProductById
-} from "../controllers/ProductController.js";
+  creerProduitHydraulique,
+  obtenirProduitsHydrauliques,
+  obtenirProduitHydrauliqueParId,
+  supprimerProduitHydraulique
+} from "../controllers/ControleurProduitHydraulique.js";
 
 const MIME_TYPES = {
   "image/jpg":       "jpg",
@@ -35,17 +38,24 @@ const upload = multer({ storage }).fields([
 
 const router = express.Router();
 
-// Public
-router.get("/",    getProducts);
-router.get("/:id", getProductById);
+// Routes publiques pour équipements hydrauliques
+router.get("/",    obtenirProduitsHydrauliques);
+router.get("/:id", obtenirProduitHydrauliqueParId);
 
-// Admin only + Multer pour parser multipart/form-data
+// Routes admin pour équipements hydrauliques
 router.post(
   "/",
   authMiddleware,
   isAdmin,
-  upload,        // <— Multer : req.body + req.files
-  createProduct  // <— Controller
+  upload,
+  creerProduitHydraulique
+);
+
+router.delete(
+  "/:id",
+  authMiddleware,
+  isAdmin,
+  supprimerProduitHydraulique
 );
 
 export default router;
